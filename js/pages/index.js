@@ -1,4 +1,5 @@
 import { obtenerProductos } from "../services/api.js";
+import { addToCart, getCartUnitCount } from "../log/cart-state.js";
 
 let allProducts = [];
 
@@ -8,7 +9,9 @@ const cartCounter = document.getElementById('cart-counter');
 
 document.addEventListener('DOMContentLoaded', async () => {
     allProducts = await obtenerProductos();
+    updateCartCounter();
     renderProducts(allProducts);
+    setupEventListeners();
 });
 
 function renderProducts(products) {
@@ -40,17 +43,20 @@ function renderProducts(products) {
         btn.addEventListener('click', ()=>{
             const id = parseInt(btn.getAttribute('data-id'));
             const product= allProducts.find(p =>p.id ===id);
-
+            addToCart(product);
             updateCartCounter();
         });
     })
 
     function updateCartCounter(){
         if(cartCounter){
-            console.log(cartCounter.textContent)
+           /* console.log(cartCounter.textContent)
             let counter = parseInt(cartCounter.textContent);
             cartCounter.textContent= (cartCounter+1);
             cartCounter.textContent= counter;
+            */
+
+            cartCounter.textContent=getCartUnitCount();
         }
     }
 
